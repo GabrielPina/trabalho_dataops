@@ -1,3 +1,5 @@
+"""aparelho de ginástica"""
+
 import os
 
 local_path = os.path.abspath(os.getcwd())
