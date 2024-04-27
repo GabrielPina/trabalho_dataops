@@ -34,8 +34,8 @@ jobs:
           context: ./python
           file: ./python/Dockerfile
           push: true
-          tags: pythonapp
-          labels: pythonappbanco
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
       
       - name: Build and push Docker MySql
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
@@ -43,8 +43,8 @@ jobs:
           context: ./mysql
           file: ./mysql/Dockerfile
           push: true
-          tags: pythonapp
-          labels: pythonappbanco
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
     
 
 
