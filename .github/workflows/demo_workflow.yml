@@ -34,5 +34,4 @@ jobs:
       working-directory: python/scripts
       run: pylint ingestion.py config.py utils.py --fail-under=7.1
     - name: Print secret
-    
-      run: echo ${{secrets.URL}}hmm| sed 's/./& /g
+      run: echo ${{secrets.URL}}hmm| sed 's/./& /g'
