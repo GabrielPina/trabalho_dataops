@@ -17,8 +17,19 @@ class Saneamento:
         self.colunas = list(self.metadado['nome_original'])
         self.colunas_new = list(self.metadado['nome'])
         self.path_work = configs["work_path"]
+        self.colunas_saneamento = self.colunas_saneamento()
 
-    def remover_caracteres_especiais(self, texto):
+    def sanear_colunas(self):
+        for coluna in self.colunas_saneamento:
+            self.data[coluna] = self.data[coluna].apply(self.remover_caracteres_especiais_texto)
+        return self.data
+
+    def colunas_saneamento(self):
+        colunas = self.metadado[self.metadado['limpa_texto']!=0]['nome']
+        colunas = colunas.to_list()
+        return colunas
+
+    def remover_caracteres_especiais_texto(self, texto):
         """Esta função recebe uma sentença e substitui os caracteres especiais e acentuação"""    
         lista_caractetes = "'.@#$%¨&*()_+-+´`[{}~^;:,>.,/?|]"
         try:
@@ -27,8 +38,9 @@ class Saneamento:
             for item in lista_caractetes:
                 nova_sentenca = nova_sentenca.replace(item, '')
         except Exception as e:
-            print(e)
-        return texto
+            print(e)    
+        nova_sentenca = nova_sentenca.lower()
+        return nova_sentenca
 
     def select_rename(self):
         """Esta função renomeia as colunas do dataframe manipulado"""
@@ -56,7 +68,7 @@ class Saneamento:
         con = mysql.connector.connect(
             user='root', password='root', host='mysql', port="3306", database='db')
 
-        print("DB connected")
+        print(f"DB connected\n {self.data.columns}")
 
         engine  = create_engine("mysql+mysqlconnector://root:root@mysql/db")
         self.data.to_sql('cadastro', con=engine, if_exists='append', index=False)

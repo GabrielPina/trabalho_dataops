@@ -29,12 +29,21 @@ def ingestion():
         response = requests.get(api_url, timeout=10).json()
         data = response['results']
     except Exception as exception_error:
-         utils.error_handler(exception_error, 'read_api')
+        utils.error_handler(exception_error, 'read_api')
 
     df = pd.json_normalize(data)
     df['load_date'] = datetime.now().strftime("%H:%M:%S")
     file = f"{config_file['raw_path']}{str(uuid.uuid4())}.csv"
-    df.to_csv(file, sep=";", index=False)
+
+    try:
+        df.to_csv(file, sep=";", index=False)
+    except OSError:
+        logging.info( r"Erro ao salvar o arquivo de retorno da api. Diretório de destino não existe.\n.\data\raw")
+        os.makedirs(r'./data/raw')
+        logging.info(r"Diretório criado './data/raw'.")
+        df.to_csv(file, sep=";", index=False)
+        logging.info(rf"Arquivo salvo:\n {file}")
+
     return file
 
 def preparation(file):
@@ -51,6 +60,9 @@ def preparation(file):
     logging.info("Dados renomeados e selecionados")
     san.tipagem()
     logging.info("Dados tipados")
+    san.sanear_colunas()
+    logging.info('Ajuste de caracteres especiais na coluna rua')
+    logging.info("Caracteres epeciais removidos")
     san.save_work()
     logging.info("Dados salvos")
 

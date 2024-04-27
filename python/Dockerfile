@@ -2,8 +2,8 @@
 FROM python:3.9
 
 RUN mkdir -p /usr/src/python-app
-RUN mkdir -p /usr/src/python-app/data/raw
-RUN mkdir -p /usr/src/python-app/data/work
+#RUN mkdir -p /usr/src/python-app/data/raw
+#RUN mkdir -p /usr/src/python-app/data/work
 
 WORKDIR /usr/src/python-app
 
