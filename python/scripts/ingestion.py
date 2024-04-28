@@ -1,13 +1,16 @@
 "Script de ingestão e preparação - projeto dataops MBADE04"
 
 import os
+# Como boas práticas, utilizamos o pacote de log, ao invés de utilizarmos o PRINT para debugar, usamos o log
 import logging
 from datetime import datetime
-
+# Deixa aleatorio o nome dos arquivos que são criados na RAW
 import uuid
 import requests
 import pandas as pd
+# Serve para chamar por exemplo a URL que está dentro do .env
 from dotenv import load_dotenv
+# importar o util para utilizar a classe de Saneamento (tipagem e salvar arquivo)
 from config import configs
 import utils
 
@@ -22,7 +25,7 @@ def ingestion():
     """
 
     logging.info("Iniciando a ingestão lemos")
-    api_url = os.getenv('URL')
+    api_url = os.getenv('URL') # Ao invés de deixar explicito a URL, pegamos ela do .env (URL está "escondida" e lemos de uma variavel de ambiente)
     logging.info(f"URL carregada: {api_url}")
 
     try:
